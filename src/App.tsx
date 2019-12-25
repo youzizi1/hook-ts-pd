@@ -1,26 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import { HashRouter, Route } from "react-router-dom";
+import { GlobalStyle } from "./assets/style";
+import { PrismStyle } from "./assets/style/prism";
+import styled from "styled-components";
+import Header from "./base/header";
+import Home from "./views/home";
+import Topic from "./views/topic";
+import TopicDetail from './views/topic-detail/index';
+import Signin from './views/signin/index';
+import Signup from './views/signup/index';
+import { IconStyle } from './assets/font/index';
+import User from './views/user/index';
 
-const App: React.FC = () => {
+const AppStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 320px;
+  max-width: 750px;
+  height: 100%;
+  padding-top: 60px;
+  margin: 0 auto;
+`;
+
+const ContentStyle = styled.div`
+  display: flex;
+  flex: 1;
+  padding: 32px 16px;
+  background-color: #f0f2f5;
+
+  > div {
+    width: 100%;
+  }
+`;
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <HashRouter>
+      <AppStyle>
+        <GlobalStyle />
+        <PrismStyle />
+        <IconStyle />
+        <Header />
+        <ContentStyle>
+          <div>
+            <Route exact path="/" component={Home} />
+            <Route path="/topic" component={Topic} />
+            <Route path="/topic-detail" component={TopicDetail} />
+            <Route path="/signin" component={Signin} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/user" component={User} />
+          </div>
+        </ContentStyle>
+      </AppStyle>
+    </HashRouter>
   );
-}
+};
 
 export default App;
