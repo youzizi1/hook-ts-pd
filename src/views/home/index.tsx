@@ -20,6 +20,7 @@ const Home = () => {
 
   React.useEffect(() => {
     search();
+    // eslint-disable-next-line
   }, []);
 
   const search = async () => {
