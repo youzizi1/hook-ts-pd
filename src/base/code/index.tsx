@@ -7,6 +7,7 @@ const CodeStyle = styled.div`
   background-color: #fff;
   overflow: hidden;
   color: #262626;
+  border: 1px solid #ebeef5;
 `;
 
 const CodeHeader = styled.div`
@@ -34,19 +35,10 @@ const CodeBottom = styled.div`
   padding: 0 12px;
   color: #606266;
 
-  > span {
-    padding-left: 8px;
+  .username {
     font-size: 13px;
+    padding-bottom: 2px;
   }
-`;
-
-const Avatar = styled.img.attrs({
-  src: require("../../assets/images/user.jpeg"),
-  alt: "avatar"
-})`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
 `;
 
 const Language = styled.div`
@@ -58,18 +50,20 @@ const Language = styled.div`
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: blue;
+    background-color: ${props => props.color};
   }
-  
+
   > span {
     padding-left: 8px;
   }
 `;
 
-const sourceCode = `console.log('hello world')
-`.trim();
+interface CodeProp {
+  item: any;
+}
 
-const Code = () => {
+const Code = (props: CodeProp) => {
+  const { item } = props;
   useEffect(() => {
     setTimeout(() => {
       Prism.highlightAll();
@@ -78,18 +72,19 @@ const Code = () => {
 
   return (
     <CodeStyle>
-      <CodeHeader>两行代码让浏览器网页内容可编辑</CodeHeader>
+      <CodeHeader>{item.title}</CodeHeader>
       <CodeBody>
         <pre>
-          <code className="language-js">{sourceCode}</code>
+          <code className={`language-${item.category.name}`}>
+            {item.content}
+          </code>
         </pre>
       </CodeBody>
       <CodeBottom>
-        <Avatar />
-        <span>MY BOO</span>
-        <Language>
+        <div className="username">{item.user.username}</div>
+        <Language color={item.category.color}>
           <i></i>
-          <span>JavaScript</span>
+          <span>{item.category.alias}</span>
         </Language>
       </CodeBottom>
     </CodeStyle>

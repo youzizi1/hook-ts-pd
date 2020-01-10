@@ -38,14 +38,34 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const HomeInput = () => {
+interface HomeInputProp {
+  searchText: string;
+
+  search: () => void;
+  changeSearchText: (e: React.FormEvent<HTMLInputElement>) => void;
+}
+
+const HomeInput = (props: HomeInputProp) => {
+  const { searchText, search, changeSearchText } = props;
+
   return (
     <HomeInputStyle>
       <InputContainer>
-        <Input placeholder="在这里查找你想要的片段" size="large" />
+        <Input
+          value={searchText}
+          placeholder="在这里查找你想要的片段"
+          size="large"
+          onChange={changeSearchText}
+        />
       </InputContainer>
       <ButtonContainer>
-        <Button type="primary" icon="search" size="default" block />
+        <Button
+          type="primary"
+          icon="search"
+          size="default"
+          block
+          onClick={search}
+        />
       </ButtonContainer>
     </HomeInputStyle>
   );

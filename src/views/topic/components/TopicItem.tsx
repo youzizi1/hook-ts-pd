@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router";
+import LazyLoad from "react-lazyload";
 
 const TopicItemStyle = styled.div`
   display: flex;
@@ -13,12 +13,15 @@ const TopicItemStyle = styled.div`
   border-radius: 4px;
 `;
 
-const TopicItemLogo = styled.img.attrs({
-  src: require("../../../assets/images/language_js.png"),
-  alt: "language_js"
-})`
+const TopicItemLogo = styled.div`
   width: 50px;
   height: 50px;
+
+  > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const TopicItemInfo = styled.div`
@@ -39,19 +42,33 @@ const TopicItemInfo = styled.div`
   }
 `;
 
-const TopicItem = () => {
-  const history = useHistory();
+type Item = {
+  name: string;
+  alias: string;
+};
 
-  const handleClick = () => {
-    history.push("/topic-detail");
-  };
+interface TopicItemProp {
+  item: Item;
+
+  topicDetail: () => void;
+}
+
+const TopicItem = (props: TopicItemProp) => {
+  const { item, topicDetail } = props;
 
   return (
-    <TopicItemStyle onClick={handleClick}>
-      <TopicItemLogo />
+    <TopicItemStyle onClick={topicDetail}>
+      <TopicItemLogo>
+        <LazyLoad height={200}>
+          <img
+            src={require(`../../../assets/images/topic/topic_${item.name}.png`)}
+            alt={item.name}
+          />
+        </LazyLoad>
+      </TopicItemLogo>
       <TopicItemInfo>
-        <span className="title">JavaScript</span>
-        <span className="count">4 条投稿</span>
+        <span className="title">{item.alias}</span>
+        <span className="count">0 条投稿</span>
       </TopicItemInfo>
     </TopicItemStyle>
   );

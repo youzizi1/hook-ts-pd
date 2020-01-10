@@ -8,10 +8,23 @@ const HomePaginationStyle = styled.div`
   padding: 32px 0;
 `;
 
-const HomePagination = () => {
+interface HomePaginationProp {
+  total: number;
+
+  changePage: (page: number) => void;
+}
+
+const HomePagination = (props: HomePaginationProp) => {
+  const { total, changePage } = props;
+
   return (
     <HomePaginationStyle>
-      <Pagination defaultCurrent={1} total={50} size="small" />
+      <Pagination
+        defaultCurrent={1}
+        total={total}
+        size="small"
+        onChange={changePage}
+      />
     </HomePaginationStyle>
   );
 };

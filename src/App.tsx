@@ -1,16 +1,13 @@
 import * as React from "react";
-import { HashRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
+
 import { GlobalStyle } from "./assets/style";
 import { PrismStyle } from "./assets/style/prism";
+import { IconStyle } from "./assets/font/index";
+
 import styled from "styled-components";
 import Header from "./base/header";
-import Home from "./views/home";
-import Topic from "./views/topic";
-import TopicDetail from './views/topic-detail/index';
-import Signin from './views/signin/index';
-import Signup from './views/signup/index';
-import { IconStyle } from './assets/font/index';
-import User from './views/user/index';
+import asyncLoad from "./utils/index";
 
 const AppStyle = styled.div`
   display: flex;
@@ -27,7 +24,6 @@ const ContentStyle = styled.div`
   display: flex;
   flex: 1;
   padding: 32px 16px;
-  background-color: #f0f2f5;
 
   > div {
     width: 100%;
@@ -36,7 +32,7 @@ const ContentStyle = styled.div`
 
 const App = () => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <AppStyle>
         <GlobalStyle />
         <PrismStyle />
@@ -44,16 +40,35 @@ const App = () => {
         <Header />
         <ContentStyle>
           <div>
-            <Route exact path="/" component={Home} />
-            <Route path="/topic" component={Topic} />
-            <Route path="/topic-detail" component={TopicDetail} />
-            <Route path="/signin" component={Signin} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/user" component={User} />
+            <Route
+              exact
+              path="/"
+              component={asyncLoad(() =>
+                import(/* webpackChunkName: "home" */ "./views/home")
+              )}
+            />
+            <Route
+              path="/topic"
+              component={asyncLoad(() =>
+                import(/* webpackChunkName: "topic" */ "./views/topic")
+              )}
+            />
+            <Route
+              path="/signin"
+              component={asyncLoad(() =>
+                import(/* webpackChunkName: "signin" */ "./views/signin")
+              )}
+            />
+            <Route
+              path="/signup"
+              component={asyncLoad(() =>
+                import(/* webpackChunkName: "signup" */ "./views/signup")
+              )}
+            />
           </div>
         </ContentStyle>
       </AppStyle>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 

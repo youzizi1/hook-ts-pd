@@ -4,27 +4,33 @@ import { Menu, Dropdown, Icon } from "antd";
 
 const HomeConditionStyle = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 16px 4px;
   font-size: 12px;
   color: #999;
 `;
 
-const menu = (
-  <Menu>
-    <Menu.Item key="0">匹配度排序</Menu.Item>
-    <Menu.Item key="1">按时间排序</Menu.Item>
-    <Menu.Item key="2">按点赞排序</Menu.Item>
-  </Menu>
-);
+interface HomeConditionProp {
+  label: string;
 
-const HomeCondition = () => {
+  changeSortType: (e: { key: string }) => void;
+}
+
+const HomeCondition = (props: HomeConditionProp) => {
+  const { changeSortType, label } = props;
+
+  const menu = (
+    <Menu onClick={changeSortType}>
+      <Menu.Item key="1">按创建时间排序</Menu.Item>
+      <Menu.Item key="2">按更新时间排序</Menu.Item>
+    </Menu>
+  );
+
   return (
     <HomeConditionStyle>
-      <p>共 275 条记录</p>
       <Dropdown overlay={menu} trigger={["click"]} placement="bottomRight">
         <span className="ant-dropdown-link">
-          匹配度排序 <Icon type="down" />
+          {label} <Icon type="down" />
         </span>
       </Dropdown>
     </HomeConditionStyle>

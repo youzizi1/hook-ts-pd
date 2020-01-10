@@ -1,6 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router";
 import { NavLink } from "react-router-dom";
+import NoLoginLinks from "./components/NoLoginLinks";
+import LoginLinks from "./components/LoginLinks";
+import { message } from "antd";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import { setUsernameAction } from "../../store/signin/action";
 
 const HeaderStyle = styled.div`
   display: flex;
@@ -48,22 +55,76 @@ const RightContainer = styled.div`
     padding-left: 16px;
     color: rgba(0, 0, 0, 0.65);
   }
+
+  .anticon {
+    vertical-align: -3px;
+    margin-left: 3px;
+  }
 `;
 
-const Header = () => (
-  <HeaderStyle>
-    <LeftContainer>
-      <LogoContainer />
-      <RouterLinkContainer>
-        <NavLink to="/">首页</NavLink>
-        <NavLink to="/topic">专题</NavLink>
-      </RouterLinkContainer>
-    </LeftContainer>
-    <RightContainer>
-      <NavLink to="/signin">登录</NavLink>
-      <NavLink to="/signup">注册</NavLink>
-    </RightContainer>
-  </HeaderStyle>
-);
+interface HeaderProp {
+  username: string;
 
-export default Header;
+  setUsername: (username: string) => void;
+}
+
+const Header = (props: HeaderProp) => {
+  const { username, setUsername } = props;
+  const history = useHistory();
+
+  const logoClick = () => {
+    history.push("/");
+  };
+
+  const signin = () => {
+    history.push("/signin");
+  };
+
+  const signup = () => {
+    history.push("/signup");
+  };
+
+  const selectItem = (e: { key: string }) => {
+    const { key } = e;
+    if (key === "0") {
+      message.info("该功能尚在开发中");
+    } else {
+      localStorage.removeItem("username");
+      localStorage.removeItem("token");
+      setUsername("");
+      message.success("退出登录成功");
+    }
+  };
+
+  return (
+    <HeaderStyle>
+      <LeftContainer>
+        <LogoContainer onClick={logoClick} />
+        <RouterLinkContainer>
+          <NavLink to="/">首页</NavLink>
+          <NavLink to="/topic">专题</NavLink>
+        </RouterLinkContainer>
+      </LeftContainer>
+      <RightContainer>
+        {username ? (
+          <LoginLinks username={username} selectItem={selectItem} />
+        ) : (
+          <NoLoginLinks signin={signin} signup={signup} />
+        )}
+      </RightContainer>
+    </HeaderStyle>
+  );
+};
+
+const mapStateToProps = (state: any) => ({
+  username: state.signin.username
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  setUsername(username: string) {
+    const action = setUsernameAction(username);
+    dispatch(action);
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

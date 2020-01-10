@@ -4,22 +4,24 @@ import styled from "styled-components";
 
 const HomeContentStyle = styled.div`
   width: 100%;
-  
+
   > div:not(:first-of-type) {
     margin-top: 32px;
   }
 `;
 
-const HomeContent = () => {
+interface HomeContentProp {
+  data: any;
+}
+
+const HomeContent = (props: HomeContentProp) => {
+  const { data } = props;
+
   return (
     <HomeContentStyle>
-      <Code />
-      <Code />
-      <Code />
-      <Code />
-      <Code />
-      <Code />
-      <Code />
+      {data.map((item: any, index: number) => (
+        <Code item={item} key={index} />
+      ))}
     </HomeContentStyle>
   );
 };
